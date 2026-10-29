@@ -1,0 +1,15 @@
+# yamllint — structural + spacing checks stay on (syntax, duplicate keys, indentation,
+# brackets/commas/colons, anchors). Only the genuinely noisy cosmetic rules are off:
+#   line-length        — machine-generated config lines run long
+#   truthy             — false-flags the GitHub Actions `on:` key
+#   comments / *-indent — spacing inside comments is not worth gating
+#   document-start     — `---` is optional and most files omit it
+# Docs: https://yamllint.readthedocs.io
+extends: default
+
+rules:
+  line-length: disable
+  truthy: disable
+  comments: disable
+  comments-indentation: disable
+  document-start: disable

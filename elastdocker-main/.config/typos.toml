@@ -1,0 +1,19 @@
+# typos config — silence project-specific false positives.
+# Docs: https://github.com/crate-ci/typos
+
+[files]
+# extend-exclude = ["CHANGELOG.md"]
+
+[default]
+# Regexes whose matches are ignored (e.g. example tokens, base64 blobs).
+# extend-ignore-re = ['''(?i)changeme''']
+
+[default.extend-words]
+# Treat the left token as correct (don't "fix" it to the right).
+nirmal = "nirmal" # project maintainer name
+sherif = "sherif" # original author attribution name
+# referer = "referer"
+
+[default.extend-identifiers]
+# Whole identifiers to leave untouched.
+# myIdent = "myIdent"

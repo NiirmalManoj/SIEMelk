@@ -1,0 +1,115 @@
+# Drives the project's own `mise run check` (the same task local dev + the pre-commit
+# hook use) and reports lint/format failures. On a PR it leaves one sticky comment
+# pointing the author at `mise run check --fix`.
+name: 🎨 Linters, Validators, and Formatters
+
+on:
+  pull_request: {}
+  # Merges to the default branch: sweep right away instead of waiting up to a day for the cron.
+  push:
+    branches: [main]
+  schedule:
+    # Daily sweep so the default branch can't quietly rot.
+    - cron: "0 0 * * *"
+  # Run manually — pick the scope: --all (whole tree) or --pr (this branch's diff vs the default branch).
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Files to check"
+        type: choice
+        options: [all, pr]
+        default: all
+
+# Read the repo; comment on PRs to point the author at the fix command.
+permissions:
+  contents: read
+  pull-requests: write
+
+# One run per PR (or ref) — newer pushes cancel stale runs.
+concurrency:
+  group: lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+
+    env:
+      # Pretty colors in the CI!
+      CLICOLOR_FORCE: "1"
+      FORCE_COLOR: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0 # full history so `check --pr` can diff against the default branch
+          persist-credentials: false
+
+      - name: Setup mise
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
+        with:
+          version: "2026.9.13" # pin mise itself, not just the action
+          install: true
+          install_args: "--locked" # honor mise.lock
+          cache: true
+          experimental: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # SO tool installs don't hit API rate limits
+
+      # Report only — same `check` task local dev and the pre-commit hook run; we do NOT auto-fix
+      # in CI. On failure, emit a `::error::` pointing the author at `--fix` (see the comment step).
+      - name: Run check
+        id: check
+        env:
+          EVENT: ${{ github.event_name }} # via env, never interpolated (zizmor: template-injection)
+          SCOPE_INPUT: ${{ inputs.scope }} # 'all'|'pr' on manual dispatch; empty on PR/schedule
+          BASE_REF: ${{ github.event.pull_request.base.ref || github.event.repository.default_branch }}
+          REF_NAME: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # pinact verifies action SHAs via the API
+        run: |
+          # PRs check changed files (--pr); schedule/dispatch default to --all (dispatch can pick --pr).
+          [ "$EVENT" = pull_request ] && scope="pr" || scope="${SCOPE_INPUT:-all}"
+          # hk's --pr resolves the base via origin/HEAD, which the Actions checkout never sets; point it
+          # at the PR base so hk diffs origin/<base>...HEAD (else it finds 0 files and passes green).
+          [ "$scope" = pr ] && git remote set-head origin "$BASE_REF" >/dev/null 2>&1 || true
+          mise run check "--$scope" || {
+            echo "::error::Lint & format failed on $REF_NAME — fix locally with 'mise run check --fix --$scope', then push. ('mise run setup' installs the pre-commit hook so this happens on every commit.)"
+            exit 1
+          }
+
+      # One sticky PR comment pointing at `--fix`: post/update it when the check fails,
+      # delete it once the check passes. No inline suggestions — the author runs the fixer.
+      - name: Comment lint status
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          CHECK_OUTCOME: ${{ steps.check.outcome }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const MARKER = '<!-- mise-lint -->';
+            const BOT = 'github-actions[bot]';
+            const failed = process.env.CHECK_OUTCOME === 'failure';
+
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find((c) => c.user.login === BOT && (c.body || '').includes(MARKER));
+
+            if (failed) {
+              const body = [
+                MARKER,
+                '🚨 Lint & format failed. Fix it locally, then push:',
+                '',
+                '```bash',
+                'mise run check --fix --pr',
+                '```',
+                '',
+                'Run `mise run setup` once so the pre-commit hook does this on every commit.',
+              ].join('\n');
+              if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              else await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            } else if (existing) {
+              await github.rest.issues.deleteComment({ owner, repo, comment_id: existing.id });
+            }

@@ -1,0 +1,17 @@
+# betterleaks config (gitleaks-compatible). Keep the built-in rules; allowlist false positives.
+# Docs: https://github.com/betterleaks/betterleaks
+[extend]
+useDefault = true
+
+[allowlist]
+# `.env` holds intentional placeholder defaults (changeme, not-real keys), not real secrets.
+paths = [
+  '''(^|/)\.env$''',
+]
+# regexes = ['''EXAMPLE_KEY''']
+stopwords = [
+  "changeme",
+  "nottherealid",
+  "notherealsecret",
+  "secrettokengoeshere",
+]

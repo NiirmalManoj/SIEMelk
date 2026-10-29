@@ -1,0 +1,15 @@
+# rumdl config — markdownlint-compatible Markdown linter + formatter.
+# Docs: https://github.com/rvben/rumdl
+[global]
+cache = false # don't write a .rumdl_cache/ next to the files
+# Cosmetic/prose-noisy rules disabled; structural rules stay on.
+disable = [
+  "MD013", # line length
+  "MD033", # inline HTML (README/issue templates use it)
+  "MD041", # first line in file should be a top-level heading
+  "MD024", # duplicate headings (common in CONTRIBUTING/templates)
+]
+
+# Table cell-padding is OFF by default. To align table columns, uncomment:
+# [MD060]
+# style = "aligned"

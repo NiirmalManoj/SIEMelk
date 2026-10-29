@@ -1,0 +1,32 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Generated TLS Certificates, Private Keys, Keystores, and Tokens
+**/secrets/*
+!**/secrets/**/.gitkeep
+*.key
+*.crt
+*.zip
+*.keystore
+*.token
+
+# Local Environment and Logs
+.env
+.env.*
+*.env
+!.env.example
+*.log
+mise.local.toml
+hk.local.pkl
+.config/mise/setup
+tools/elastalert/rules/*
+setup/SIEM.txt
+
