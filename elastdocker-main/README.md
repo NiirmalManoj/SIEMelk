@@ -1,13 +1,14 @@
 <p align="center">
 <img width="500px" src="https://user-images.githubusercontent.com/16992394/147855783-07b747f3-d033-476f-9e06-96a4a88a54c6.png" alt="Elastic Stack Architecture">
 </p>
-<h1 align="center">Elastic Stack (ELK) & SIEM Security Lab</h1>
-<h3 align="center">Enterprise Containerized Observability, Security Intelligence, and Self-Monitoring</h3>
+<h1 align="center">SIEM & ELK Stack</h1>
+<h3 align="center">Containerized Observability, Security Intelligence, and Self-Monitoring</h3>
 <h4 align="center">Configured for Log Telemetry, Metrics, APM, Threat Detection, and Security Information & Event Management (SIEM)</h4>
 <p align="center">
    <b>Maintained & Engineered by Nirmal Manoj</b>
 </p>
 <p align="center">
+   <img src="https://img.shields.io/badge/SIEM%20%26%20ELK-Stack-blue?style=flat&logo=elasticsearch" alt="SIEM & ELK Stack">
    <img src="https://img.shields.io/badge/Elastic%20Stack-9.4.2-blue?style=flat&logo=elasticsearch" alt="Elastic Stack 9.4.2">
    <img src="https://img.shields.io/badge/Docker%20Compose-v2%20Ready-2496ED?style=flat&logo=docker" alt="Docker Compose v2">
    <img src="https://img.shields.io/badge/Security-TLS%20%2F%20HTTPS%20Enabled-success?style=flat" alt="Security Enabled">
@@ -17,7 +18,7 @@
 
 # Introduction
 
-Welcome to the **Elastic Stack & SIEM Lab**, a production-grade, containerized observability and security telemetry deployment engineered for modern infrastructure. This laboratory delivers a complete Elastic Stack (**Elasticsearch, Kibana, Logstash, APM Server, Filebeat, and Metricbeat**) preconfigured with automated PKI certificate management, Keystore encryption, performance monitoring, and turnkey SIEM capabilities—operational with a single command.
+Welcome to **SIEM & ELK Stack**, a production-grade, containerized observability and security telemetry deployment engineered for modern infrastructure. This laboratory delivers a complete Elastic Stack (**Elasticsearch, Kibana, Logstash, APM Server, Filebeat, and Metricbeat**) preconfigured with automated PKI certificate management, Keystore encryption, performance monitoring, and turnkey SIEM capabilities—operational with a single command.
 
 Whether used for SOC lab simulation, log aggregation, APM tracing, or containerized telemetry analysis, this suite provides an enterprise-ready foundation with zero manual certificate provisioning required.
 

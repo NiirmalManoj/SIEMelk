@@ -1,6 +1,7 @@
-# Enterprise SIEM & Elastic Observability Lab
+# SIEM & ELK Stack
 
 <p align="center">
+  <img src="https://img.shields.io/badge/SIEM%20%26%20ELK-Stack-blue?style=flat&logo=elasticsearch" alt="SIEM & ELK Stack">
   <img src="https://img.shields.io/badge/Elastic%20Stack-9.4.2-blue?style=flat&logo=elasticsearch" alt="Elastic Stack 9.4.2">
   <img src="https://img.shields.io/badge/Docker%20Compose-v2%20Ready-2496ED?style=flat&logo=docker" alt="Docker Compose v2">
   <img src="https://img.shields.io/badge/Security-TLS%20%2F%20HTTPS%20Enabled-success?style=flat" alt="Security Enabled">
@@ -15,7 +16,7 @@
 
 ## 📌 Executive Summary
 
-The **Enterprise SIEM & Elastic Observability Lab** is a containerized, production-grade security monitoring platform and logging ecosystem. Engineered on top of Elastic Stack 9.4.2, this lab provides centralized security event collection, threat detection, performance telemetry, and application tracing with end-to-end TLS encryption and Keystore credential management.
+**SIEM & ELK Stack** is a containerized, production-grade security monitoring platform and logging ecosystem. Engineered on top of Elastic Stack 9.4.2, this lab provides centralized security event collection, threat detection, performance telemetry, and application tracing with end-to-end TLS encryption and Keystore credential management.
 
 It is structured for immediate deployment in SOC simulation environments, threat hunting laboratories, and containerized workload monitoring.
 
